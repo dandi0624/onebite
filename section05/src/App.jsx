@@ -1,11 +1,12 @@
 import "./App.css";
-import { useState } from "react";
+//import { useState } from "react";
 // import Header from "./components/Header.jsx";
 // import Main from "./components/Main.jsx";
 // import Footer from "./components/Footer"; // 리액트는 확장자 안써도 됨
 // import Button from './components/Button';
-import Bulb from "./components/Bulb";
-import Counter from "./components/Counter";
+//import Bulb from "./components/Bulb";
+//import Counter from "./components/Counter";
+import Register from "./components/Register";
 
 function App() {
   // 부모 컴포넌트 , root컴포넌트는 조상
@@ -26,10 +27,16 @@ function App() {
 
   //console.log(state);
 
+  // return (
+  //   <>
+  //     <Bulb />
+  //     <Counter />
+  //   </>
+  // );
+
   return (
     <>
-      <Bulb />
-      <Counter />
+      <Register />
     </>
   );
 }
