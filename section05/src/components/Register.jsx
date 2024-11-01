@@ -5,38 +5,117 @@ import { useState } from "react";
 // 3. 국적
 // 4. 자기소개
 
+//const Register = () => {
+//   const [name, setName] = useState("이름");
+//   const [birth, setBirth] = useState("");
+//   const [country, setCountry] = useState("");
+//   const [bio, setBio] = useState("");
+
+//   const onChangeName = (e) => {
+//     setName(e.target.value);
+//   };
+
+//   const onChangeBirth = (e) => {
+//     setBirth(e.target.value);
+//   };
+
+//   const onChangeCountry = (e) => {
+//     setCountry(e.target.value);
+//   };
+
+//   const onChangeBio = (e) => {
+//     setBio(e.target.value);
+//   };
+
+//   return (
+//     <div>
+//       <div>
+//         <input value={name} onChange={onChangeName} placeholder={"이름"} />
+//       </div>
+//       <div>
+//         <input value={birth} onChange={onChangeBirth} type="date" />
+//       </div>
+//       <div>
+//         <select value={country} onChange={onChangeCountry}>
+//           <option></option>
+//           <option value="kr">한국</option>
+//           <option value="us">미국</option>
+//           <option value="uk">영국</option>
+//         </select>
+//       </div>
+//       <div>
+//         <textarea value={bio} onChange={onChangeBio} />
+//         {bio}
+//       </div>
+//     </div>
+//   );
+// -------------------------------------------------------------------
+
+// 위의 코드를 간결하게
 const Register = () => {
-  const [name, setName] = useState("이름");
-  const [birth, setBirth] = useState("");
-  const [country, setCountry] = useState("");
-  const [bio, setBio] = useState("");
+  const [input, setInput] = useState({
+    name: "",
+    birth: "",
+    country: "",
+    bio: "",
+  });
 
-  const onChangeName = (e) => {
-    setName(e.target.value);
+  const onChange = (e) => {
+    console.log(e.target.name, e.target.value);
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value, // 아래 주석처리한 코드 줄이기
+    });
   };
 
-  const onChangeBirth = (e) => {
-    setBirth(e.target.value);
-  };
+  //   const onChangeName = (e) => {
+  //     setInput({
+  //       ...input, // 기존의 input state에 들어있는 name이 아닌 다른 값들까지 변경되지 않도록 설정
+  //       name: e.target.value,
+  //     });
+  //   };
 
-  const onChangeCountry = (e) => {
-    setCountry(e.target.value);
-  };
+  //   const onChangeBirth = (e) => {
+  //     setInput({
+  //       ...input,
+  //       birth: e.target.value,
+  //     });
+  //   };
 
-  const onChangeBio = (e) => {
-    setBio(e.target.value);
-  };
+  //   const onChangeCountry = (e) => {
+  //     setInput({
+  //       ...input,
+  //       country: e.target.value,
+  //     });
+  //   };
+
+  //   const onChangeBio = (e) => {
+  //     setInput({
+  //       ...input,
+  //       bio: e.target.value,
+  //     });
+  //   };
 
   return (
     <div>
       <div>
-        <input value={name} onChange={onChangeName} placeholder={"이름"} />
+        <input
+          name="name"
+          value={input.name}
+          onChange={onChange}
+          placeholder={"이름"}
+        />
       </div>
       <div>
-        <input value={birth} onChange={onChangeBirth} type="date" />
+        <input
+          name="birth"
+          value={input.birth}
+          onChange={onChange}
+          type="date"
+        />
       </div>
       <div>
-        <select value={country} onChange={onChangeCountry}>
+        <select name="country" value={input.country} onChange={onChange}>
           <option></option>
           <option value="kr">한국</option>
           <option value="us">미국</option>
@@ -44,11 +123,9 @@ const Register = () => {
         </select>
       </div>
       <div>
-        <textarea value={bio} onChange={onChangeBio} />
-        {bio}
+        <textarea name="bio" value={input.bio} onChange={onChange} />
       </div>
     </div>
   );
 };
-
 export default Register;
