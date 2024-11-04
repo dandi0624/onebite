@@ -7,6 +7,7 @@ import "./App.css";
 //import Bulb from "./components/Bulb";
 //import Counter from "./components/Counter";
 import Register from "./components/Register";
+import HookExam from "./components/HookExam";
 
 function App() {
   // 부모 컴포넌트 , root컴포넌트는 조상
@@ -36,7 +37,7 @@ function App() {
 
   return (
     <>
-      <Register />
+      <HookExam />
     </>
   );
 }
