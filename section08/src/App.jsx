@@ -26,7 +26,7 @@ const mokData = [
 ];
 
 function App() {
-  const [todos, setTodos] = useState([mokData]);
+  const [todos, setTodos] = useState(mokData);
   const idRef = useRef(3);
 
   // 새로운 일정 추가하기
@@ -50,7 +50,7 @@ function App() {
         <Editor onCreate={onCreate} />
       </section>
       <section>
-        <List />
+        <List todos={todos} />
       </section>
     </div>
   );
