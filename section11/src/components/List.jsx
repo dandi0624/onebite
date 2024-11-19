@@ -1,8 +1,10 @@
 import "./List.css";
 import TodoItem from "./Todoitem";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
+import { TodoContext } from "../App";
 
-const List = ({ todos, onUpdate, onDelete }) => {
+const List = () => {
+  const { todos } = useContext(TodoContext);
   const [search, setSearch] = useState("");
 
   const onChangeSearch = (e) => {
@@ -33,18 +35,18 @@ const List = ({ todos, onUpdate, onDelete }) => {
   //   }
   // } 이 함수를 아래 useMemo로 활용
 
-  const {totalCount, doneCount, notDoneCount} = useMemo(()=>{
-    console.log("getAnalyzedData 호출")
+  const { totalCount, doneCount, notDoneCount } = useMemo(() => {
+    console.log("getAnalyzedData 호출");
     const totalCount = todos.length;
-    const doneCount = todos.filter((todo)=>todo.isDone).length;
+    const doneCount = todos.filter((todo) => todo.isDone).length;
     const notDoneCount = totalCount - doneCount;
 
     return {
       totalCount,
       doneCount,
-      notDoneCount
-    }
-  }, [todos])
+      notDoneCount,
+    };
+  }, [todos]);
   // 의존성 배열 : deps
 
   // const {totalCount, doneCount, notDoneCount} = getAnalyzedData()
@@ -65,14 +67,7 @@ const List = ({ todos, onUpdate, onDelete }) => {
       />
       <div className="todos_wapper">
         {filteredTodos.map((todo) => {
-          return (
-            <TodoItem
-              key={todo.id}
-              {...todo}
-              onUpdate={onUpdate}
-              onDelete={onDelete}
-            />
-          );
+          return <TodoItem key={todo.id} {...todo} />;
         })}
       </div>
     </div>
