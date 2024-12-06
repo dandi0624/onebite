@@ -1,5 +1,5 @@
 import "./App.css";
-import { useReducer,useRef, createContext } from "react";
+import { useReducer,useRef, createContext, useEffect, useState } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Diary from "./pages/Diary";
@@ -10,7 +10,7 @@ import Button from "./components/Button";
 import Header from "./components/Header";
 
 
-import { getEmotionImage } from "./tuil/get-emotion-image";
+//import { getEmotionImage } from "./tuil/get-emotion-image";
 
 // import emotion1 from "./assets/emotion1.png";
 // import emotion2 from "./assets/emotion2.png";
@@ -22,43 +22,83 @@ import { getEmotionImage } from "./tuil/get-emotion-image";
 // 2. "/new" : 새로운 일기를 작성하는 New 페이지
 // 3. "/diary" : 일기를 상세히 조회하는 Diary 페이지
 
-const mockData = [
-  {
-    id: 1,
-    createdDate: new Date("2024-11-27").getTime(),
-    emotionId: 1,
-    content: "1번 일기 내용"
-  },
-  {
-    id: 2,
-    createdDate: new Date("2024-11-26").getTime(),
-    emotionId: 2,
-    content: "2번 일기 내용"
-  },
-  {
-    id: 3,
-    createdDate: new Date("2024-10-26").getTime(),
-    emotionId: 3,
-    content: "3번 일기 내용"
-  }
-]
+// const mockData = [
+//   {
+//     id: 1,
+//     createdDate: new Date("2024-11-27").getTime(),
+//     emotionId: 1,
+//     content: "1번 일기 내용"
+//   },
+
 
 function reducer(state, action){
+  let nextState;
+
   switch(action.type){
-    case 'CREATE': return [action.data, ...state];
-    case 'UPDATE': return state.map((item)=>String(item.id) === String(action.data.id)? action.data : item);
-    case 'DELETE': return state.filter((item)=>String(item.id) !== String(action.id));
+    case 'INTI' : 
+      return action.data;
+    case 'CREATE': 
+      { nextState = [action.data, ...state]; break};
+    case 'UPDATE':
+      {nextState =  state.map((item)=>String(item.id) === String(action.data.id)? action.data : item); break};
+    case 'DELETE': 
+      {nextState =  state.filter((item)=>String(item.id) !== String(action.id)); break};
     default: return state;
   }
+  localStorage.setItem("diary", JSON.stringify(nextState));
+  return nextState;
 }
 
 export const DiaryStateContext = createContext();
 export const DiaryDispatchContext = createContext();
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, dispatch] = useReducer(reducer, []);
+  const idRef = useRef(0);
 
-  const [data, dispatch] = useReducer(reducer, mockData);
-  const idRef = useRef(3);
+  useEffect(()=>{
+    const storedData = localStorage.getItem("diary");
+    if(!storedData){
+      setIsLoading(false);
+      return;
+    }
+
+    const parsedData = JSON.parse(storedData);
+    if(!Array.isArray(parsedData)){
+      setIsLoading(false);
+      return;
+    }
+
+    let maxId = 0;
+    parsedData.forEach((item)=>{
+      if(Number(item.id) > maxId){
+        maxId = Number(item.id)
+      }
+    })
+
+    //console.log(maxId)
+    idRef.current = maxId + 1;
+
+    dispatch({
+      type:"INTI",
+      data: parsedData,
+    })
+    setIsLoading(false);
+  },[]);
+
+
+  // localStorage.setItem('test', 'hello');
+  // localStorage.setItem("person", JSON.stringify({name:"이정환"}));
+
+  // console.log(localStorage.getItem("test"));
+  // console.log(JSON.parse(localStorage.getItem("person")));
+  // JSON.parse(undefined)는 반드시 값이 있어야함 없음 오류//
+
+  //localStorage.removeItem('test');
+ // localStorage.removeItem('person'); 또는 애플리케이션에서 백스페이스로 지울 수 있음
+
+
 
   // const nav = useNavigate();
 
@@ -82,7 +122,7 @@ function App() {
 
 
   // 기존 일기 수정
-  const onUdate = (id, createdDate, emotionId, content)=>{
+  const onUpdate = (id, createdDate, emotionId, content)=>{
     dispatch(
     {
       type: "UPDATE",
@@ -101,7 +141,9 @@ function App() {
   }
 
 
-
+  if(isLoading){
+    return <div>데이터 로딩중입니다...</div>;
+  }
 
   return (
     <>
@@ -116,9 +158,6 @@ function App() {
       {/* <div>
         <img src={getEmotionImage(1)} />
         <img src={getEmotionImage(2)} />
-        <img src={getEmotionImage(3)} />
-        <img src={getEmotionImage(4)} />
-        <img src={getEmotionImage(5)} />
       </div> */}
 
       {/* <div>
@@ -128,51 +167,12 @@ function App() {
       </div>
       <button onClick={onClickButton}>New 페이지로 이동</button> */}
 
-      {/* <Header
-        title={"Header"}
-        leftChild={<Button text={"Left"} />}
-        rightChild={<Button text={"Right"} />}
-      /> */}
-
-      {/* <Button
-        text={123}
-        onClick={() => {
-          console.log("123버튼 클릭!");
-        }}
-      />
-      <Button
-        text={123}
-        type={"POSITIVE"}
-        onClick={() => {
-          console.log("123버튼 클릭!");
-        }}
-      />
-      <Button
-        text={123}
-        type={"NEGATIVE"}
-        onClick={() => {
-          console.log("123버튼 클릭!");
-        }}
-      /> */}
-
-      {/* <button onClick={()=>{
-        onCreate(new Date().getTime(), 1, "Hello");
-      }}>일기 추가 테스트</button>
-
-      <button onClick={()=>{
-        onUdate(1, new Date().getTime(), 3, "수정된일기입니다.")
-      }}>일기 수정 테스트</button>
-      
-      <button onClick={()=>{
-        onDelete(1)
-      }}>일기 수정 테스트</button> */}
-
 
   <DiaryStateContext.Provider value={data}>
   <DiaryDispatchContext.Provider value={
     {
       onCreate,
-      onUdate,
+      onUpdate,
       onDelete
     }
   }>

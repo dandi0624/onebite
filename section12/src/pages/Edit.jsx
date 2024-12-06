@@ -26,11 +26,16 @@ const Edit = () =>{
     }    
 
 
-    const onSubmit = (input)=>{
+    const onSubmit = (input) => {
         if(window.confirm("일기를 정말 수정할까요?")){
-        onUpdate(params.id, input.createdDate.getTime(), input.emotionId, input.content);
+            onUpdate(
+                params.id,
+                input.createdDate.getTime(),
+                input.emotionId,
+                input.content,
+            );
+            nav("/", {replace: true});
         }
-        nav('/',{replace:true})
     }
 
     return <div>
@@ -38,7 +43,7 @@ const Edit = () =>{
         leftChild={<Button onClick={()=>nav(-1)} text={"< 뒤로가기"}/>}
         rightChild={<Button onClick={onClickDelete} text={"삭제하기"} type={"NEGATIVE"}/>}
         />
-        <Editor initData={curDiaryItem}/>
+        <Editor initData={curDiaryItem} onSubmit={onSubmit}/>
     </div>
 }
 

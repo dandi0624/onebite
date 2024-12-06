@@ -94,7 +94,6 @@ const Editor = ({ initData, onSubmit }) => {
           onClick={onClickSubmitButton}
           text={"작성완료"}
           type={"POSITIVE"}
-          onSubmit={onSubmit}
         />
       </section>
     </div>
